@@ -1,4 +1,4 @@
-package dataviewer1orig;
+package dataviewer2;
 
 public abstract class Command {
 	protected DataViewerData dataViewerData;
@@ -10,3 +10,4 @@ public abstract class Command {
 	
 	public abstract void execute();
 }
+
