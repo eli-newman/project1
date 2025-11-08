@@ -1,4 +1,4 @@
-package dataviewer1orig;
+package dataviewer2;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -17,3 +17,4 @@ public class SetPlotDataCommand extends Command {
 		dataViewerData.setPlotData(newData);
 	}
 }
+
