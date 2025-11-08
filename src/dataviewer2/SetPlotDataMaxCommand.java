@@ -1,4 +1,4 @@
-package dataviewer1orig;
+package dataviewer2;
 
 import java.util.TreeMap;
 
@@ -15,4 +15,5 @@ public class SetPlotDataMaxCommand extends Command {
 	{
 		dataViewerData.setPlotDataMax(newData);
 	}
+
 }
