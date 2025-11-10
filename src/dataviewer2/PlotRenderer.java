@@ -1,4 +1,4 @@
-package dataviewer1orig;
+package dataviewer2;
 
 import java.awt.Color;
 import java.util.SortedMap;
@@ -6,8 +6,11 @@ import java.util.SortedMap;
 import edu.du.dudraw.Draw;
 
 public class PlotRenderer {
-	public StaticReferences statref;
-	public ColorUtil colorUtil;
+	private ColorUtil colorUtil;
+	
+	public PlotRenderer() {
+		this.colorUtil = new ColorUtil();
+	}
 	
 	public void drawMainMenu(Draw window, String selectedCountry, String selectedState, int selectedStartYear, int selectedEndYear, String selectedVisualization) {
 		window.clear(Color.WHITE);
@@ -34,43 +37,42 @@ public class PlotRenderer {
 		drawMenuItems(window, menuItems);
     }
 	
-	private void drawData(Draw window, DataViewerData data, String m_selectedCountry, String m_selectedState, int m_selectedStartYear, int m_selectedEndYear, String m_selectedVisualizationn) {
+	public void drawData(Draw window, DataViewerData data, String m_selectedCountry, String m_selectedState, int m_selectedStartYear, int m_selectedEndYear, String m_selectedVisualization) {
     	// Give a buffer around the plot window
-		window.setXscale(-statref.DATA_WINDOW_BORDER, statref.WINDOW_WIDTH+statref.DATA_WINDOW_BORDER);
-		window.setYscale(-statref.DATA_WINDOW_BORDER, statref.WINDOW_HEIGHT+statref.DATA_WINDOW_BORDER);
+		window.setXscale(-StaticReferences.DATA_WINDOW_BORDER, StaticReferences.WINDOW_WIDTH+StaticReferences.DATA_WINDOW_BORDER);
+		window.setYscale(-StaticReferences.DATA_WINDOW_BORDER, StaticReferences.WINDOW_HEIGHT+StaticReferences.DATA_WINDOW_BORDER);
 
     	// gray background
 		window.clear(Color.LIGHT_GRAY);
 
     	// white plot area
 		window.setPenColor(Color.WHITE);
-		window.filledRectangle(statref.WINDOW_WIDTH/2.0, statref.WINDOW_HEIGHT/2.0, statref.WINDOW_WIDTH/2.0, statref.WINDOW_HEIGHT/2.0);  
+		window.filledRectangle(StaticReferences.WINDOW_WIDTH/2.0, StaticReferences.WINDOW_HEIGHT/2.0, StaticReferences.WINDOW_WIDTH/2.0, StaticReferences.WINDOW_HEIGHT/2.0);  
 
 		window.setPenColor(Color.BLACK);
     	
     	double nCols = 12; // one for each month
     	double nRows = m_selectedEndYear - m_selectedStartYear + 1; // for the years
  		
-        double cellWidth = statref.WINDOW_WIDTH / nCols;
-        double cellHeight = statref.WINDOW_HEIGHT / nRows;
+        double cellWidth = StaticReferences.WINDOW_WIDTH / nCols;
+        double cellHeight = StaticReferences.WINDOW_HEIGHT / nRows;
         
-        boolean extremaVisualization = m_selectedVisualization.equals(statref.VISUALIZATION_MODES[statref.VISUALIZATION_EXTREMA_IDX]);
-        info("visualization: %s (extrema == %b)", m_selectedVisualization, extremaVisualization);
+        boolean extremaVisualization = m_selectedVisualization.equals(StaticReferences.VISUALIZATION_MODES[StaticReferences.VISUALIZATION_EXTREMA_IDX]);
         
         for(int month = 1; month <= 12; month++) {
-            double fullRange = data.getPlotMonthlyMaxValue.get(month) - data.getPlotMonthlyMinValue.get(month);
-            double extremaMinBound = data.getPlotMonthlyMinValue.get(month) + statref.EXTREMA_PCT * fullRange;
-            double extremaMaxBound = data.getPlotMonthlyMaxValue.get(month) - statref.EXTREMA_PCT * fullRange;
+            double fullRange = data.getPlotMonthlyMaxValue().get(month) - data.getPlotMonthlyMinValue().get(month);
+            double extremaMinBound = data.getPlotMonthlyMinValue().get(month) + StaticReferences.EXTREMA_PCT * fullRange;
+            double extremaMaxBound = data.getPlotMonthlyMaxValue().get(month) - StaticReferences.EXTREMA_PCT * fullRange;
 
 
             // draw the line separating the months and the month label
             window.setPenColor(Color.BLACK);
         	double lineX = (month-1.0)*cellWidth;
-        	window.line(lineX, 0.0, lineX, statref.WINDOW_HEIGHT);
-        	window.text(lineX+cellWidth/2.0, -statref.DATA_WINDOW_BORDER/2.0, statref.MONTH_NAMES[month]);
+        	window.line(lineX, 0.0, lineX, StaticReferences.WINDOW_HEIGHT);
+        	window.text(lineX+cellWidth/2.0, -StaticReferences.DATA_WINDOW_BORDER/2.0, StaticReferences.MONTH_NAMES[month]);
         	
         	// there should always be a map for the month
-        	SortedMap<Integer,Double> monthData = data.getPlotData.get(month);
+        	SortedMap<Integer,Double> monthData = data.getPlotData().get(month);
         	
         	for(int year = m_selectedStartYear; year <= m_selectedEndYear; year++) {
 
@@ -111,31 +113,31 @@ public class PlotRenderer {
         window.setPenColor(Color.BLACK);
 
         double labelYearSpacing = (m_selectedEndYear - m_selectedStartYear) / 5.0;
-        double labelYSpacing = statref.WINDOW_HEIGHT/5.0;
+        double labelYSpacing = StaticReferences.WINDOW_HEIGHT/5.0;
         // spaced out by 5, but need both the first and last label, so iterate 6
         for(int i=0; i<6; i++) {
         	int year = (int)Math.round(i * labelYearSpacing + m_selectedStartYear);
         	String text = String.format("%4d", year);
         	
         	window.textRight(0.0, i*labelYSpacing, text);
-        	window.textLeft(statref.WINDOW_WIDTH, i*labelYSpacing, text);
+        	window.textLeft(StaticReferences.WINDOW_WIDTH, i*labelYSpacing, text);
         }
      
         // draw rectangle around the whole data plot window
-        window.rectangle(statref.WINDOW_WIDTH/2.0, statref.WINDOW_HEIGHT/2.0, statref.WINDOW_WIDTH/2.0, statref.WINDOW_HEIGHT/2.0);
+        window.rectangle(StaticReferences.WINDOW_WIDTH/2.0, StaticReferences.WINDOW_HEIGHT/2.0, StaticReferences.WINDOW_WIDTH/2.0, StaticReferences.WINDOW_HEIGHT/2.0);
         
         // put in the title
         String title = String.format("%s, %s from %d to %d. Press 'M' for Main Menu.  Press 'Q' to Quit.",
         		m_selectedState, m_selectedCountry, m_selectedStartYear, m_selectedEndYear);
-        window.text(statref.WINDOW_WIDTH/2.0, statref.WINDOW_HEIGHT + statref.DATA_WINDOW_BORDER/2.0, title);
+        window.text(StaticReferences.WINDOW_WIDTH/2.0, StaticReferences.WINDOW_HEIGHT + StaticReferences.DATA_WINDOW_BORDER/2.0, title);
 	}
 	
 	public void drawMenuItems(Draw window, String[] menuItems) {
-		double yCoord = statref.MENU_STARTING_Y;
+		double yCoord = StaticReferences.MENU_STARTING_Y;
 		
 		for(int i=0; i<menuItems.length; i++) {
-			window.textLeft(statref.MENU_STARTING_X, yCoord, menuItems[i]);
-			yCoord -= statref.MENU_ITEM_SPACING;
+			window.textLeft(StaticReferences.MENU_STARTING_X, yCoord, menuItems[i]);
+			yCoord -= StaticReferences.MENU_ITEM_SPACING;
 		}
 	}
 	
