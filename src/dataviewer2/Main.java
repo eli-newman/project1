@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         String dataFile = "Data/GlobalLandTemperaturesByState.csv";
         // String dataFile = "Data/sample.csv";  // Use for testing
-        new ApplicationController(dataFile);
+        new DataViewerApp(dataFile);
     }
 }
