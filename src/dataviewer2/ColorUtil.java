@@ -2,12 +2,13 @@ package dataviewer2;
 
 import java.awt.Color;
 
+/**
+ * Utility for calculating colors based on temperature values.
+ */
 public class ColorUtil {
-	public StaticReferences statref;
 	
-	public ColorUtil(StaticReferences sr)
-	{
-		statref = sr;
+	public ColorUtil() {
+		// No initialization needed - uses static references
 	}
 	
 	public Color getColorTemperature(Double value, boolean doGrayscale)
@@ -15,7 +16,7 @@ public class ColorUtil {
 		if(null == value) {
     		return null;
     	}
-    	double pct = (value - statref.TEMPERATURE_MIN_C) / statref.TEMPERATURE_RANGE;
+    	double pct = (value - StaticReferences.TEMPERATURE_MIN_C) / StaticReferences.TEMPERATURE_RANGE;
     	
     
     	if (pct > 1.0) {
