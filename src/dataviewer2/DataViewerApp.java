@@ -79,13 +79,45 @@ public class DataViewerApp implements DrawListener {
         plotData.clearPlotData();
         
         // Load data for selected country
-        List<TemperatureRecord> records = fileLoader.loadData(dataFilePath, appState.getSelectedCountry());
-        
+      List<List<Object>> rawData = fileLoader.loadData("Data/GlobalLandTemperaturesByState.csv");
+
+		List<TemperatureRecord> records = new ArrayList<>();
+
+		for (List<Object> row : rawData) {
+		    try {
+		        if (row.size() < 5) continue;
+
+		        String dateString = row.get(0).toString().trim();
+		        String tempStr = row.get(1).toString().trim();
+		        String state = row.get(3).toString().trim();
+		        String country = row.get(4).toString().trim();
+
+		        // Skip header and blanks
+		        if (dateString.equalsIgnoreCase("dt") || dateString.isEmpty() || tempStr.isEmpty())
+		            continue;
+
+		        // Parse date like "2000-01-01"
+		        String[] parts = dateString.split("-");
+		        if (parts.length < 2) continue;
+
+		        int year = Integer.parseInt(parts[0]);
+		        int month = Integer.parseInt(parts[1]);
+		        double temperature = Double.parseDouble(tempStr);
+		        records.add(new TemperatureRecord(year, month, temperature, state, country));
+
+
+		    } catch (Exception e) {
+		        // Ignore malformed or partial lines
+		        System.err.println("Skipping malformed row: " + row);
+		    }
+		}
+
+		System.out.println("Loaded " + records.size() + " temperature records.");
         // Add all records and extract metadata
         for(TemperatureRecord record : records) {
             dataRecords.add(record);
             dataStates.add(record.getState());
-            dataCountries.add(appState.getSelectedCountry());
+			dataCountries.add(record.getCountry());
             dataYears.add(record.getYear());
         }
         
