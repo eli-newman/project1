@@ -116,7 +116,9 @@ public class DataViewerApp implements DrawListener {
         // Add all records and extract metadata
         for(TemperatureRecord record : records) {
             dataRecords.add(record);
-            dataStates.add(record.getState());
+            if (record.getCountry().equals(appState.getSelectedCountry())) {
+			    dataStates.add(record.getState());
+			}
 			dataCountries.add(record.getCountry());
             dataYears.add(record.getYear());
         }
