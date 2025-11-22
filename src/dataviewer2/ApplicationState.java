@@ -5,9 +5,6 @@ package dataviewer2;
  * Separates state management from application logic.
  */
 public class ApplicationState {
-    // GUI mode constants
-    public static final int GUI_MODE_MAIN_MENU = 0;
-    public static final int GUI_MODE_DATA = 1;
     
     // Default values
     private static final String DEFAULT_COUNTRY = "United States";
@@ -20,8 +17,8 @@ public class ApplicationState {
     private Integer selectedEndYear;
     private String selectedVisualization;
     
-    // GUI state
-    private int guiMode;
+    
+    private AppModeState currentState;
     
     /**
      * Create new application state with default values.
@@ -29,7 +26,7 @@ public class ApplicationState {
     public ApplicationState() {
         this.selectedCountry = DEFAULT_COUNTRY;
         this.selectedVisualization = DEFAULT_VISUALIZATION;
-        this.guiMode = GUI_MODE_MAIN_MENU;
+        currentState = new MenuModeState();
     }
     
     // Country
@@ -77,27 +74,16 @@ public class ApplicationState {
         this.selectedVisualization = selectedVisualization;
     }
     
+
     // GUI Mode
-    public int getGuiMode() {
-        return guiMode;
+    public void setModeState(AppModeState newState)
+    {
+    	currentState = newState;
     }
     
-    public void setGuiMode(int guiMode) {
-        this.guiMode = guiMode;
-    }
-    
-    /**
-     * Check if currently in main menu mode.
-     */
-    public boolean isInMenuMode() {
-        return guiMode == GUI_MODE_MAIN_MENU;
-    }
-    
-    /**
-     * Check if currently in data/plot mode.
-     */
-    public boolean isInDataMode() {
-        return guiMode == GUI_MODE_DATA;
+    public AppModeState getAppModeState()
+    {
+    	return currentState;
     }
 }
 
