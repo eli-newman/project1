@@ -140,6 +140,5 @@ public class PlotRenderer {
 			yCoord -= StaticReferences.MENU_ITEM_SPACING;
 		}
 	}
+	}
 	
-	
-}
