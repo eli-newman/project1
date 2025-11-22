@@ -196,6 +196,7 @@ public class DataViewerApp implements DrawListener {
      */
     @Override
     public void update() {
+    	/*
         if(appState.isInMenuMode()) {
             plotRenderer.drawMainMenu(window, 
                 appState.getSelectedCountry(),
@@ -211,6 +212,9 @@ public class DataViewerApp implements DrawListener {
                 appState.getSelectedEndYear(),
                 appState.getSelectedVisualization());
         }
+        */
+    	
+    	appState.getAppModeState().update(appState, plotRenderer, window, plotData);
         window.show();
     }
     
@@ -223,17 +227,13 @@ public class DataViewerApp implements DrawListener {
             System.exit(0);
         }
         
-        if(appState.isInMenuMode()) {
-            handleMenuInput(key);
-        } else if(appState.isInDataMode()) {
-            handlePlotInput(key);
-        }
+        appState.getAppModeState().handleInput(key, this, appState);
     }
     
     /**
      * Handle input when in main menu mode.
      */
-    private void handleMenuInput(int key) {
+    public void handleMenuInput(int key) {
         switch(key) {
             case 'C': // Set country
                 Object selectedCountry = JOptionPane.showInputDialog(null,
@@ -321,7 +321,7 @@ public class DataViewerApp implements DrawListener {
                 break;
                 
             case 'P': // Plot data
-                appState.setGuiMode(ApplicationState.GUI_MODE_DATA);
+                appState.setModeState(new DataModeState());
                 if(plotData.getPlotData().isEmpty()) {
                     updatePlotData();
                 }
@@ -335,7 +335,7 @@ public class DataViewerApp implements DrawListener {
      */
     private void handlePlotInput(int key) {
         if(key == 'M') {
-            appState.setGuiMode(ApplicationState.GUI_MODE_MAIN_MENU);
+        	appState.setModeState(new MenuModeState());
             update();
         }
     }
