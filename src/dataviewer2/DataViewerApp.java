@@ -195,25 +195,7 @@ public class DataViewerApp implements DrawListener {
      * Update the display.
      */
     @Override
-    public void update() {
-    	/*
-        if(appState.isInMenuMode()) {
-            plotRenderer.drawMainMenu(window, 
-                appState.getSelectedCountry(),
-                appState.getSelectedState(),
-                appState.getSelectedStartYear(),
-                appState.getSelectedEndYear(),
-                appState.getSelectedVisualization());
-        } else if(appState.isInDataMode()) {
-            plotRenderer.drawData(window, plotData,
-                appState.getSelectedCountry(),
-                appState.getSelectedState(),
-                appState.getSelectedStartYear(),
-                appState.getSelectedEndYear(),
-                appState.getSelectedVisualization());
-        }
-        */
-    	
+    public void update() {   	
     	appState.getAppModeState().update(appState, plotRenderer, window, plotData);
         window.show();
     }
